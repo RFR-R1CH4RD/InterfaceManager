@@ -66,7 +66,7 @@ local InterfaceManager = {} do
 
 		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
 			Title = "Theme",
-			Description = "You will choose theme of interface.",
+			Description = "You will choose theme.",
 			Values = Library.Themes,
 			Default = Settings.Theme,
 			Callback = function(Value)
@@ -93,7 +93,7 @@ local InterfaceManager = {} do
 	
 		section:AddToggle("TransparentToggle", {
 			Title = "Transparency",
-			Description = "You will enable transparency",
+			Description = "You will enable transparency.",
 			Default = Settings.Transparency,
 			Callback = function(Value)
 				Library:ToggleTransparency(Value)
