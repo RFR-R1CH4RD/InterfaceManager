@@ -1,5 +1,113 @@
 local httpService = game:GetService("HttpService")
 
+--Function For Toggle UI
+function toggleui()
+wait()
+local Toggle = false
+    
+local R3THTOGGLEBUTTON = Instance.new("ScreenGui")
+local Button = Instance.new("TextButton")
+local UICorner = Instance.new("UICorner")
+local UICorner_2 = Instance.new("UICorner")
+
+R3THTOGGLEBUTTON.Name = "R3THTOGGLEBUTTON"
+R3THTOGGLEBUTTON.Parent = game.CoreGui
+
+Button.Name = "Button"
+Button.Parent = R3THTOGGLEBUTTON
+UICorner.CornerRadius = UDim.new(0, 7)
+UICorner_2.CornerRadius = UDim.new(0, 7)
+Button.BackgroundColor3 = Color3.fromRGB(24, 24, 24) -- CHANGES BUTTON COLOR
+Button.BorderColor3 = Color3.fromRGB(24, 24, 24)
+Button.BorderSizePixel = 0
+Button.Position = UDim2.new(0.942588627, 0, 0.223685458, 0)
+Button.Size = UDim2.new(0.0358672254, 0, 0.0771396905, 0)
+Button.AutoButtonColor = false -- Disable automatic button color change
+Button.Font = Enum.Font.SourceSans -- Set font to default
+Button.Text = "" -- Remove text
+
+UICorner.Parent = Button
+UICorner_2.Parent = Button
+
+--Load the image
+local ImageLabel = Instance.new("ImageLabel")
+ImageLabel.Parent = Button
+ImageLabel.BackgroundTransparency = 1 -- Set transparency to 1 for full transparency
+ImageLabel.Size = UDim2.new(1, 0, 1, 0)
+ImageLabel.Image = "rbxassetid://16882312013" -- Set the image asset ID
+
+Button.MouseEnter:Connect(function()
+    Button.BackgroundColor3 = Color3.fromRGB(28, 28, 28) -- Change button color when hovered
+end)
+
+Button.MouseLeave:Connect(function()
+    Button.BackgroundColor3 = Color3.fromRGB(24, 24, 24) -- Revert button color when not hovered
+end)
+
+--Animation
+local TweenService = game:GetService("TweenService")
+local Info = TweenInfo.new(
+    0.3, 
+    Enum.EasingStyle.Quad, 
+    Enum.EasingDirection.Out, 
+    -1, 
+    true, 
+    0 
+)
+
+local HoverTween = TweenService:Create(Button, Info, {BackgroundColor3 = Color3.fromRGB(28, 28, 28)})
+local LeaveTween = TweenService:Create(Button, Info, {BackgroundColor3 = Color3.fromRGB(24, 24, 24)})
+
+Button.MouseEnter:Connect(function()
+    HoverTween:Play()
+end)
+
+Button.MouseLeave:Connect(function()
+    LeaveTween:Play()
+end)
+
+
+-- Animation for button press
+local PressTween = TweenService:Create(Button, TweenInfo.new(0.1), {Size = UDim2.new(0.037, 0, 0.078, 0)}) 
+local ReleaseTween = TweenService:Create(Button, TweenInfo.new(0.1), {Size = UDim2.new(0.0358672254, 0, 0.0771396905, 0)}) 
+
+Button.MouseButton1Down:Connect(function()
+    PressTween:Play()
+end)
+
+Button.MouseButton1Up:Connect(function()
+    ReleaseTween:Play()
+end)
+
+
+    Button.Draggable = true
+    
+    UICorner.Parent = Button
+    
+    UICorner_2.Parent = Button
+    
+    Button.MouseButton1Click:connect(function()
+        Toggle = not Toggle
+    end)
+    local input = loadstring(game:HttpGet('https://pastebin.com/raw/dYzQv3d8'))()
+    while r3thtoggleui do
+        function toggleuifix()
+        if Toggle then
+            input.press(Enum.KeyCode.LeftAlt)
+            Toggle = false
+            R3TH:toggle()
+
+            wait()
+        end
+    end
+    wait()
+    pcall(toggleuifix)
+    end
+end
+
+
+
+
 local InterfaceManager = {} do
 	InterfaceManager.Folder = "FluentSettings"
     InterfaceManager.Settings = {
@@ -101,6 +209,28 @@ local InterfaceManager = {} do
                 InterfaceManager:SaveSettings()
 			end
 		})
+
+		--Toggle For UI Toggle Button In Settings Page
+                local Toggle = Tabs.Settings:AddToggle("UIToggleButtonToggle", {Title = "UI Toggle Button", Default = uitogglebutton, Description = "You will enable ui toggle button.", })
+
+                Toggle:OnChanged(function(uitogglebutton)
+                if uitogglebutton == true then
+                r3thtoggleui = true
+                wait()
+               toggleui()
+               wait()
+               end
+               if uitogglebutton == false then
+               r3thtoggleui = false
+                wait()
+              for i,v in pairs (game.CoreGui:GetChildren()) do
+              if v.Name == "R3THTOGGLEBUTTON" then
+                v:Destroy()
+               end
+            end
+              wait()
+             end
+          end)
 	
 		local MenuKeybind = section:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = Settings.MenuKeybind, Description = "You will set minimize bind.", })
 		MenuKeybind:OnChanged(function()
