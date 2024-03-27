@@ -1,100 +1,126 @@
 local httpService = game:GetService("HttpService")
 
-
 local function toggleui()
     wait()
     local Toggle = false
-    local VirtualInputManager = game:GetService('VirtualInputManager')
-    local R3THTOGGLEBUTTON = Instance.new("ScreenGui")
-    local Button = Instance.new("TextButton")
+    local ToggleUI = Instance.new("ScreenGui")
+    local ImageButton = Instance.new("ImageButton")
     local UICorner = Instance.new("UICorner")
-    local UICorner_2 = Instance.new("UICorner")
+    local UIAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
+    local UIAspectRatioConstraint_2 = Instance.new("UIAspectRatioConstraint")
 
-    R3THTOGGLEBUTTON.Name = "R3THTOGGLEBUTTON"
-    R3THTOGGLEBUTTON.Parent = game.CoreGui
+    ToggleUI.Name = "ToggleUI"
+    ToggleUI.Parent = game.CoreGui
+    ToggleUI.ResetOnSpawn = false
 
-    Button.Name = "Button"
-    Button.Parent = R3THTOGGLEBUTTON
+    ImageButton.Parent = ToggleUI
+    ImageButton.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+    ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    ImageButton.BorderSizePixel = 0
+    ImageButton.Position = UDim2.new(0.864814222, 0, 0.395481884, 0)
+    ImageButton.Size = UDim2.new(0.0787679404, 0, 0.148388118, 0)
+    ImageButton.AutoButtonColor = false
+    ImageButton.Image = "rbxassetid://16882312013"
+
     UICorner.CornerRadius = UDim.new(0, 7)
-    UICorner_2.CornerRadius = UDim.new(0, 7)
-    Button.BackgroundColor3 = Color3.fromRGB(24, 24, 24) -- CHANGES BUTTON COLOR
-    Button.BorderColor3 = Color3.fromRGB(24, 24, 24)
-    Button.BorderSizePixel = 0
-    Button.Position = UDim2.new(0.942588627, 0, 0.223685458, 0)
-    Button.Size = UDim2.new(0.0358672254, 0, 0.0771396905, 0)
-    Button.AutoButtonColor = false -- Disable automatic button color change
-    Button.Font = Enum.Font.SourceSans -- Set font to default
-    Button.Text = "" -- Remove text
+    UICorner.Parent = ImageButton
 
-    -- Load the image
-    local ImageLabel = Instance.new("ImageLabel")
-    ImageLabel.Parent = Button
-    ImageLabel.BackgroundTransparency = 1 -- Set transparency to 1 for full transparency
-    ImageLabel.Size = UDim2.new(1, 0, 1, 0)
-    ImageLabel.Image = "rbxassetid://16882312013" -- Set the image asset ID
+    UIAspectRatioConstraint.Parent = ImageButton
+    UIAspectRatioConstraint.AspectRatio = 1.028
 
-    Button.MouseEnter:Connect(function()
-        Button.BackgroundColor3 = Color3.fromRGB(28, 28, 28) -- Change button color when hovered
-    end)
+    UIAspectRatioConstraint_2.Parent = ToggleUI
+    UIAspectRatioConstraint_2.AspectRatio = 1.615
 
-    Button.MouseLeave:Connect(function()
-        Button.BackgroundColor3 = Color3.fromRGB(24, 24, 24) -- Revert button color when not hovered
-    end)
+    -- Itt folytatódik az eredeti kód
 
-    -- Animation
     local TweenService = game:GetService("TweenService")
+    local DefaultSize = UDim2.new(0.079, 0, 0.148, 0)
+    local UserInputService = game:GetService("UserInputService")
+    local ScreenGui = ToggleUI -- ToggleUI-ra módosítva
+    local ImageButton = ImageButton -- ImageButton-ra módosítva
+
+    local Dragging, DragInput, MousePos, StartPos = false
+
     local Info = TweenInfo.new(
-        0.3, -- Duration
-        Enum.EasingStyle.Quad, -- Easing style
-        Enum.EasingDirection.Out, -- Easing direction
-        -1, -- Number of times to repeat (-1 means infinite)
-        true, -- Reverses if true
-        0 -- Delay
+        1, 
+        Enum.EasingStyle.Quad, 
+        Enum.EasingDirection.Out, 
+        -1, 
+        true, 
+        0 
     )
 
-    local HoverTween = TweenService:Create(Button, Info, {BackgroundColor3 = Color3.fromRGB(28, 28, 28)})
-    local LeaveTween = TweenService:Create(Button, Info, {BackgroundColor3 = Color3.fromRGB(24, 24, 24)})
+    local HoverTween = TweenService:Create(ImageButton, Info, {BackgroundColor3 = Color3.fromRGB(28, 28, 28)})
+    local LeaveTween = TweenService:Create(ImageButton, Info, {BackgroundColor3 = Color3.fromRGB(24, 24, 24)})
 
-    Button.MouseEnter:Connect(function()
+    ImageButton.MouseEnter:Connect(function()
         HoverTween:Play()
     end)
 
-    Button.MouseLeave:Connect(function()
+    ImageButton.MouseLeave:Connect(function()
         LeaveTween:Play()
     end)
 
-    -- Animation for button press
-    local PressTween = TweenService:Create(Button, TweenInfo.new(0.1), {Size = UDim2.new(0.037, 0, 0.078, 0)}) -- Change size on press
-    local ReleaseTween = TweenService:Create(Button, TweenInfo.new(0.1), {Size = UDim2.new(0.0358672254, 0, 0.0771396905, 0)}) -- Revert size on release
+    local PressTween = TweenService:Create(ImageButton, TweenInfo.new(0.1), {Size = UDim2.new(0.079 * 1.2, 0, 0.148 * 1.2, 0)}) 
+    local ReleaseTween = TweenService:Create(ImageButton, TweenInfo.new(0.1), {Size = DefaultSize})
 
-    Button.MouseButton1Down:Connect(function()
+    ImageButton.MouseButton1Down:Connect(function()
         PressTween:Play()
     end)
 
-    Button.MouseButton1Up:Connect(function()
+    ImageButton.MouseButton1Up:Connect(function()
         ReleaseTween:Play()
     end)
 
-    Button.Draggable = true
-    
-    UICorner.Parent = Button
-    
-    UICorner_2.Parent = Button
-    
-    Button.MouseButton1Click:Connect(function()
+    local function StartDrag(input)
+        Dragging = true
+        MousePos = input.Position
+        StartPos = ImageButton.Position
+    end
+
+    local function EndDrag()
+        Dragging = false
+    end
+
+    ImageButton.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            StartDrag(input)
+        end
+    end)
+
+    ImageButton.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            DragInput = input
+        end
+    end)
+
+    ImageButton.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            EndDrag()
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input == DragInput and Dragging then
+            local Delta = input.Position - MousePos
+            ImageButton.Position = UDim2.new(
+                StartPos.X.Scale, StartPos.X.Offset + Delta.X,
+                StartPos.Y.Scale, StartPos.Y.Offset + Delta.Y
+            )
+        end
+    end)
+
+    ImageButton.MouseButton1Click:Connect(function()
         Toggle = not Toggle
         if Toggle then
             game:GetService('VirtualInputManager'):SendKeyEvent(true, 'LeftAlt', false, uwu)
-
         else
             game:GetService('VirtualInputManager'):SendKeyEvent(true, 'LeftAlt', false, uwu)
-
         end
     end)
-    
+
     while Toggle do
         wait()
-       
     end
 end
 
@@ -213,7 +239,7 @@ local InterfaceManager = {} do
         toggleui()
     else
         for i,v in pairs(game.CoreGui:GetChildren()) do
-            if v.Name == "R3THTOGGLEBUTTON" then
+            if v.Name == "ToggleUI" then
                 v:Destroy()
             end
         end
