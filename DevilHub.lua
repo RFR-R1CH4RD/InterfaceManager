@@ -113,15 +113,15 @@ local InterfaceManager = {} do
 			Description = "You will enable ui toggle button.",
 			Callback = function(uitogglebutton)
 		          if uitogglebutton == true then
-                          toggleui()
-                          else
-                          for i,v in pairs(game.CoreGui:GetChildren()) do
-                         if v.Name == "R3THTOGGLEBUTTON" then
-                         v:Destroy()
-                       end
-                  end
-              end
-         end)
+        toggleui()
+    else
+        for i,v in pairs(game.CoreGui:GetChildren()) do
+            if v.Name == "R3THTOGGLEBUTTON" then
+                v:Destroy()
+            end
+        end
+    end
+	end
 		})
 
 
