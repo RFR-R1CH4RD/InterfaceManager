@@ -112,9 +112,9 @@ local function toggleui()
     ImageButton.MouseButton1Click:Connect(function()
         Toggle = not Toggle
         if Toggle then
-            Window:Minimize()
+            game:GetService('VirtualInputManager'):SendKeyEvent(true, 'LeftAlt', false, uwu)
         else
-            Window:Minimize()
+            game:GetService('VirtualInputManager'):SendKeyEvent(true, 'LeftAlt', false, uwu)
         end
     end)
 
