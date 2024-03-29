@@ -112,9 +112,9 @@ local function toggleui()
     ImageButton.MouseButton1Click:Connect(function()
         Toggle = not Toggle
         if Toggle then
-            game:GetService("UserInputService"):SetKeyboardState(Enum.KeyCode.LeftAlt, false)
+            game:GetService('VirtualInputManager'):SendKeyEvent(true, 'LeftAlt', false, uwu)
         else
-           game:GetService("UserInputService"):SetKeyboardState(Enum.KeyCode.LeftAlt, false)
+            game:GetService('VirtualInputManager'):SendKeyEvent(true, 'LeftAlt', false, uwu)
         end
     end)
 
