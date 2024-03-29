@@ -31,13 +31,12 @@ local function toggleui()
     UIAspectRatioConstraint_2.Parent = ToggleUI
     UIAspectRatioConstraint_2.AspectRatio = 1.615
 
-    -- Itt folytatódik az eredeti kód
 
     local TweenService = game:GetService("TweenService")
     local DefaultSize = UDim2.new(0.079, 0, 0.148, 0)
     local UserInputService = game:GetService("UserInputService")
-    local ScreenGui = ToggleUI -- ToggleUI-ra módosítva
-    local ImageButton = ImageButton -- ImageButton-ra módosítva
+    local ScreenGui = ToggleUI 
+    local ImageButton = ImageButton 
 
     local Dragging, DragInput, MousePos, StartPos = false
 
