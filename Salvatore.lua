@@ -1,5 +1,9 @@
 local httpService = game:GetService("HttpService")
 
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/RFR-R1CH4RD/SaveManager/main/Salvatore.lua"))()
+
+
 local function toggleui()
     wait()
     local Toggle = false
