@@ -112,9 +112,9 @@ local function toggleui()
     ImageButton.MouseButton1Click:Connect(function()
         Toggle = not Toggle
         if Toggle then
-            Library.MinimizeKeybind
+            Settings.MenuKeybind = MenuKeybind.Value
         else
-            Library.MinimizeKeybind
+            Settings.MenuKeybind = MenuKeybind.Value
         end
     end)
 
