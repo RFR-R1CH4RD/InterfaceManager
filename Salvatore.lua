@@ -1,5 +1,3 @@
-local httpService = game:GetService("HttpService")
-
 local function toggleui()
     wait()
     local Toggle = false
@@ -31,22 +29,19 @@ local function toggleui()
     UIAspectRatioConstraint_2.Parent = ToggleUI
     UIAspectRatioConstraint_2.AspectRatio = 1.615
 
-
     local TweenService = game:GetService("TweenService")
     local DefaultSize = UDim2.new(0.079, 0, 0.148, 0)
     local UserInputService = game:GetService("UserInputService")
-    local ScreenGui = ToggleUI 
-    local ImageButton = ImageButton 
 
     local Dragging, DragInput, MousePos, StartPos = false
 
     local Info = TweenInfo.new(
-        1, 
-        Enum.EasingStyle.Quad, 
-        Enum.EasingDirection.Out, 
-        -1, 
-        true, 
-        0 
+        1,
+        Enum.EasingStyle.Quad,
+        Enum.EasingDirection.Out,
+        -1,
+        true,
+        0
     )
 
     local HoverTween = TweenService:Create(ImageButton, Info, {BackgroundColor3 = Color3.fromRGB(28, 28, 28)})
@@ -60,7 +55,7 @@ local function toggleui()
         LeaveTween:Play()
     end)
 
-    local PressTween = TweenService:Create(ImageButton, TweenInfo.new(0.1), {Size = UDim2.new(0.079 * 1.2, 0, 0.148 * 1.2, 0)}) 
+    local PressTween = TweenService:Create(ImageButton, TweenInfo.new(0.1), {Size = UDim2.new(0.079 * 1.2, 0, 0.148 * 1.2, 0)})
     local ReleaseTween = TweenService:Create(ImageButton, TweenInfo.new(0.1), {Size = DefaultSize})
 
     ImageButton.MouseButton1Down:Connect(function()
@@ -99,167 +94,35 @@ local function toggleui()
         end
     end)
 
-    UserInputService.InputChanged:Connect(function(input)
-        if input == DragInput and Dragging then
-            local Delta = input.Position - MousePos
-            ImageButton.Position = UDim2.new(
-                StartPos.X.Scale, StartPos.X.Offset + Delta.X,
-                StartPos.Y.Scale, StartPos.Y.Offset + Delta.Y
-            )
-        end
-    end)
-local MenuKeybind = MinimizeKeybind2
     ImageButton.MouseButton1Click:Connect(function()
         Toggle = not Toggle
+        -- Perform action based on toggle state
         if Toggle then
-            MinimizeKeybind2
+            -- Handle toggle ON (e.g., enable Minimize function)
+            print("Minimize enabled")
+            -- Call MinimizeKeybind function here
+            if InterfaceManager.Settings.MenuKeybind then
+                InterfaceManager.Settings.MenuKeybind() -- Call the function
+            end
         else
-            MinimizeKeybind2
+            -- Handle toggle OFF (e.g., disable Minimize function)
+            print("Minimize disabled")
         end
     end)
 
     while Toggle do
         wait()
+        -- Your code here for Minimize functionality when Toggle is true
     end
 end
 
-
-
-
-
-local InterfaceManager = {} do
-	InterfaceManager.Folder = "FluentSettings"
-        InterfaceManager.Settings = {
+local InterfaceManager = {}
+do
+    InterfaceManager.Folder = "FluentSettings"
+    InterfaceManager.Settings = {
         Theme = "Darker",
         Acrylic = false,
         Transparency = false,
-        MenuKeybind = MinimizeKeybind2
+        MenuKeybind = nil -- Define or remove reference to MinimizeKeybind2
     }
-
-    function InterfaceManager:SetFolder(folder)
-		self.Folder = folder;
-		self:BuildFolderTree()
-	end
-
-    function InterfaceManager:SetLibrary(library)
-		self.Library = library
-	end
-
-    function InterfaceManager:BuildFolderTree()
-		local paths = {}
-
-		local parts = self.Folder:split("/")
-		for idx = 1, #parts do
-			paths[#paths + 1] = table.concat(parts, "/", 1, idx)
-		end
-
-		table.insert(paths, self.Folder)
-		table.insert(paths, self.Folder .. "/settings")
-
-		for i = 1, #paths do
-			local str = paths[i]
-			if not isfolder(str) then
-				makefolder(str)
-			end
-		end
-	end
-
-    function InterfaceManager:SaveSettings()
-        writefile(self.Folder .. "/options.json", httpService:JSONEncode(InterfaceManager.Settings))
-    end
-
-    function InterfaceManager:LoadSettings()
-        local path = self.Folder .. "/options.json"
-        if isfile(path) then
-            local data = readfile(path)
-            local success, decoded = pcall(httpService.JSONDecode, httpService, data)
-
-            if success then
-                for i, v in next, decoded do
-                    InterfaceManager.Settings[i] = v
-                end
-            end
-        end
-    end
-
-    function InterfaceManager:BuildInterfaceSection(tab)
-        assert(self.Library, "Must set InterfaceManager.Library")
-		local Library = self.Library
-        local Settings = InterfaceManager.Settings
-
-        InterfaceManager:LoadSettings()
-
-		local section = tab:AddSection("Interface")
-
-		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
-			Title = "Theme",
-			Description = "You will choose theme.",
-			Values = Library.Themes,
-			Default = Settings.Theme,
-			Callback = function(Value)
-				Library:SetTheme(Value)
-                Settings.Theme = Value
-                InterfaceManager:SaveSettings()
-			end
-		})
-
-        InterfaceTheme:SetValue(Settings.Theme)
-	
-		if Library.UseAcrylic then
-			section:AddToggle("AcrylicToggle", {
-				Title = "Acrylic",
-				Description = "You will enable acrylic.(The blurred background requires graphic quality 8+)",
-				Default = Settings.Acrylic,
-				Callback = function(Value)
-					Library:ToggleAcrylic(Value)
-                    Settings.Acrylic = Value
-                    InterfaceManager:SaveSettings()
-				end
-			})
-		end
-	
-		section:AddToggle("TransparentToggle", {
-			Title = "Transparency",
-			Description = "You will enable transparency.",
-			Default = Settings.Transparency,
-			Callback = function(Value)
-				Library:ToggleTransparency(Value)
-				Settings.Transparency = Value
-                InterfaceManager:SaveSettings()
-			end
-		})
-
-
-		section:AddToggle("UIToggleButtonToggle", {
-			Title = "UI Toggle Button",
-			Description = "You will enable ui toggle button.",
-			Callback = function(uitogglebutton)
-		          if uitogglebutton == true then
-        toggleui()
-    else
-        for i,v in pairs(game.CoreGui:GetChildren()) do
-            if v.Name == "ToggleUI" then
-                v:Destroy()
-            end
-        end
-    end
-	end
-		})
-
-
-
-
-
-
-		
-	
-		local MenuKeybind = section:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = Settings.MenuKeybind, Description = "You will set minimize bind.", })
-		MenuKeybind:OnChanged(function()
-			Settings.MenuKeybind = MenuKeybind.Value
-            InterfaceManager:SaveSettings()
-		end)
-		Library.MinimizeKeybind = MenuKeybind
-    end
 end
-
-return InterfaceManager
