@@ -1,9 +1,5 @@
 local httpService = game:GetService("HttpService")
 
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/RFR-R1CH4RD/SaveManager/main/Salvatore.lua"))()
-
-
 local function toggleui()
     wait()
     local Toggle = false
@@ -116,9 +112,9 @@ local function toggleui()
     ImageButton.MouseButton1Click:Connect(function()
         Toggle = not Toggle
         if Toggle then
-              Window:Minimize()
+            game:GetService('VirtualInputManager'):SendKeyEvent(true, 'LeftAlt', false, uwu)
         else
-              Window:Minimize()
+            game:GetService('VirtualInputManager'):SendKeyEvent(true, 'LeftAlt', false, uwu)
         end
     end)
 
