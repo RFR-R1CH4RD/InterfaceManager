@@ -108,7 +108,7 @@ local function toggleui()
             )
         end
     end)
-
+local MenuKeybind = MinimizeKeybind2
     ImageButton.MouseButton1Click:Connect(function()
         Toggle = not Toggle
         if Toggle then
