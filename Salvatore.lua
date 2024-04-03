@@ -95,7 +95,7 @@ local InterfaceManager = {} do
 		end
 
 
-                local MenuKeybind = section:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = Settings.MenuKeybind, Description = "You will set minimize bind.", })
+               local MenuKeybind = section:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = Settings.MenuKeybind, Description = "You will set minimize bind.", })
 		MenuKeybind:OnChanged(function()
 			Settings.MenuKeybind = MenuKeybind.Value
             InterfaceManager:SaveSettings()
@@ -114,9 +114,8 @@ local InterfaceManager = {} do
 				Settings.Transparency = Value
                 InterfaceManager:SaveSettings()
 			end
-		  end
-    })
+               })
+   end
 end
-
 
 return InterfaceManager
