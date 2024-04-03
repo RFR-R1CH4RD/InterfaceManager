@@ -101,8 +101,7 @@ local InterfaceManager = {} do
             InterfaceManager:SaveSettings()
 		end)
 		Library.MinimizeKeybind = MenuKeybind
-             end
-         end
+             
 
 
 		
@@ -115,6 +114,8 @@ local InterfaceManager = {} do
 				Settings.Transparency = Value
                 InterfaceManager:SaveSettings()
 			end
+		end
+         end
 		})
 
 
