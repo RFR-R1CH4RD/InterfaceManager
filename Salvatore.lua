@@ -114,9 +114,9 @@ local InterfaceManager = {} do
 				Settings.Transparency = Value
                 InterfaceManager:SaveSettings()
 			end
-		end
-         end
-		})
+		  end
+    })
+end
 
 
 return InterfaceManager
